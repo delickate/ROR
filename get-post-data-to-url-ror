@@ -1,0 +1,50 @@
+controller
+=====================
+class ApisController < ApplicationController
+              def rims_apis
+              end
+              def get_key
+                require 'open-uri'
+                # url load 
+                link  = JSON.load(open("http://rims.punjab.gov.pk/api/databaseupdate/formkey"))
+                  respond_to do |format|
+                          format.json  {render :json => link.to_json}
+                  end       
+              end
+           end
+
+
+
+HTML file
+==========================
+<table cellpadding="10" cellspacing="10" style="border:1px solid #999; background-color:#ccc;">
+                <tbody>
+                    <tr>
+                        <td>
+                            <input type="button" value="Get Key" id="get_key">
+                        </td>
+                        <td>
+                            <input type="text" id="todaysKey">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="button" value="Post Data" id="post_data">
+                        </td>
+                        <td>
+                            <textarea id="postresponse" rows="3" cols="25"></textarea>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            
+ROUTES:
+==============
+Rails.application.routes.draw do
+              ################################## RIMS API ##############################################
+              root "apis#rims_apis"
+              get '/apis_for_rims_system' => 'apis#rims_apis', :as=> :rims_apis ## show form rims
+              post '/get_key_for_rims' => 'apis#get_key', :as=> :get_key,:format => ['js','json'] ##get key
+              ##########################################################################################
+             
+            end
